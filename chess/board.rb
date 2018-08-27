@@ -12,10 +12,18 @@ class Board
   end 
   
   def populate
-    @board[0] = Array.new(8) {Piece.new}
-    @board[1] = Array.new(8) {Piece.new}
-    @board[6] = Array.new(8) {Piece.new}
-    @board[7] = Array.new(8) {Piece.new}
+    # @board[0] = Array.new(8) {Piece.new}
+    # @board[1] = Array.new(8) {Piece.new}
+    # @board[6] = Array.new(8) {Piece.new}
+    # @board[7] = 
+    
+    @board.each_with_index do |el,idx|
+      if (idx < 2) || (idx > 5)
+        board[idx] = Array.new(8) {Piece.new}
+      else
+        board[idx] = Array.new(8) {NullPiece.new}
+      end
+    end
   end 
 end 
 
@@ -25,6 +33,11 @@ class Piece
   end 
   
 end 
+
+class NullPiece < Piece
+  def initialize 
+  end 
+end
 
 x = Board.new
 p x.board
