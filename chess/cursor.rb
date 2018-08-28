@@ -33,7 +33,8 @@ MOVES = {
 
 class Cursor
 
-  attr_reader :cursor_pos, :board
+  attr_reader :board
+  attr_accessor :cursor_pos
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
@@ -43,6 +44,23 @@ class Cursor
   def get_input
     key = KEYMAP[read_char]
     handle_key(key)
+  end
+
+  def update_pos(diff)
+
+    x,y = @cursor_pos
+    dx, dy = diff
+    possible_pos = [x + dx, y + dy]
+    p possible_pos
+    if board.valid_pos?(possible_pos)
+      @cursor_pos = possible_pos
+    elsif board.valid_pos?(possible_pos).class == InvalidMove
+      begin
+      rescue InvalidMove => e
+        puts e
+        retry
+      end
+    end
   end
 
   private
@@ -90,19 +108,5 @@ class Cursor
 
   end
 
-  def update_pos(diff)
 
-    x,y = @cursor_pos
-    dx, dy = diff
-    possible_pos = [x + dx, y + dy]
-    if board.valid_pos?(possible_pos)
-      @cursor_pos = possible_pos
-    elsif board.valid_pos?(possible_pos).class == InvalidMove
-      begin
-      rescue InvalidMove => e
-        puts e
-        retry
-      end
-    end
-  end
 end
