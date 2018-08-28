@@ -37,13 +37,31 @@ class Board
       self[start_pos]= move_to
       self[end_pos]= held_piece
     end
+
+    return self[end_pos]
   end
+
+  def off_board?(pos)
+    return pos.any? { |el| el < 0 || el > 7 }
+  end
+
+  def valid_pos?(pos)
+    begin
+      raise InvalidMove, "Out of bounds" if off_board?(pos)
+    rescue InvalidMove => e
+      puts e
+      @cursor.get_input
+      retry
+
+    end
+  end
+
 
   def is_valid?(start_pos, end_pos)
     begin
-      raise MissingPiece, "No piece!" if start_pos.class == NullPiece
-      raise InvalidMove, "Out of bounds on row" if (end_pos[0] > 7) || (end_pos[0] < 0)
-      raise InvalidMove, "Out of bounds on column" if (end_pos[1] > 7) || (end_pos[1] < 0)
+      raise InvalidMove, "Out of bounds starting position" if off_board?(start_pos)
+      raise InvalidMove, "Out of bounds ending position" if off_board?(end_pos)
+      raise MissingPiece, "No piece!" if self[start_pos].class == NullPiece
       raise InvalidMove, "Already piece in square" unless self[end_pos].class == NullPiece
       # raise InvalidMove, "Piece doesn't move that way!" if piece.valid_move(start_pos, end_pos)
     end
@@ -54,15 +72,20 @@ class Board
 end
 
 class Piece
-
+  attr_accessor :render
   def initialize
     @pos = [0,0]
+    @render = "p"
+
   end
 
 end
 
 class NullPiece < Piece
+  attr_accessor :render
+
   def initialize
+    @render = "d"
   end
 end
 
@@ -77,4 +100,4 @@ x = Board.new
 x.move_piece([1,1],[2,1])
 p x.board[2][1]
 p x.board[1][1]
-# p x.board
+p x.board
