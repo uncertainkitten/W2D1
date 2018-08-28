@@ -15,7 +15,7 @@ class Board
   def populate
     @board.each_with_index do |el,idx|
       if (idx < 2) || (idx > 5)
-        board[idx] = Array.new(8) {Piece.new}
+        board[idx] = Array.new(8) {Piece.new(self)}
       end
     end
   end
@@ -56,7 +56,7 @@ class Board
       raise InvalidMove, "Out of bounds starting position" if off_board?(start_pos)
       raise InvalidMove, "Out of bounds ending position" if off_board?(end_pos)
       raise MissingPiece, "No piece!" if self[start_pos].class == NullPiece
-      raise InvalidMove, "Already piece in square" unless self[end_pos].class == NullPiece
+      # raise InvalidMove, "Already piece in square" unless self[end_pos].class == NullPiece
       # raise InvalidMove, "Piece doesn't move that way!" if piece.valid_move(start_pos, end_pos)
     end
 
@@ -65,23 +65,7 @@ class Board
 
 end
 
-class Piece
-  attr_accessor :render
-  def initialize
-    @pos = [0,0]
-    @render = "p"
 
-  end
-
-end
-
-class NullPiece < Piece
-  attr_accessor :render
-
-  def initialize
-    @render = "d"
-  end
-end
 
 class InvalidMove < ArgumentError
 end
