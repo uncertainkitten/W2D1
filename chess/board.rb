@@ -46,14 +46,8 @@ class Board
   end
 
   def valid_pos?(pos)
-    begin
-      raise InvalidMove, "Out of bounds" if off_board?(pos)
-    rescue InvalidMove => e
-      puts e
-      @cursor.get_input
-      retry
-
-    end
+    raise InvalidMove, "Out of bounds" if off_board?(pos)
+    !off_board?(pos)
   end
 
 
@@ -95,9 +89,9 @@ end
 class MissingPiece < ArgumentError
 end
 
-x = Board.new
-
-x.move_piece([1,1],[2,1])
-p x.board[2][1]
-p x.board[1][1]
-p x.board
+# x = Board.new
+#
+# x.move_piece([1,1],[2,1])
+# p x.board[2][1]
+# p x.board[1][1]
+# p x.board

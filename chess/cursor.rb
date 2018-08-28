@@ -46,23 +46,6 @@ class Cursor
     handle_key(key)
   end
 
-  def update_pos(diff)
-
-    x,y = @cursor_pos
-    dx, dy = diff
-    possible_pos = [x + dx, y + dy]
-    p possible_pos
-    if board.valid_pos?(possible_pos)
-      @cursor_pos = possible_pos
-    elsif board.valid_pos?(possible_pos).class == InvalidMove
-      begin
-      rescue InvalidMove => e
-        puts e
-        retry
-      end
-    end
-  end
-
   private
 
   def read_char
@@ -96,9 +79,9 @@ class Cursor
 
   def handle_key(key)
     case key
-    when :return || :space
+    when :return, :space
       return @cursor_pos
-    when :left || :right || :up || :down
+    when :left, :right, :up, :down
       update_pos(MOVES[key])
       return nil
     when :ctrl_c
@@ -108,5 +91,22 @@ class Cursor
 
   end
 
+  def update_pos(diff)
+    p "This is diff: #{diff}"
 
+    x,y = @cursor_pos
+    dx, dy = diff
+    possible_pos = [x + dx, y + dy]
+    p possible_pos
+
+    @cursor_pos = possible_pos if @board.valid_pos?(possible_pos)
+
+    # begin
+    #   board.valid_pos?(possible_pos)
+    #   @cursor_pos = possible_pos
+    # rescue board.valid_pos?(possible_pos).class == InvalidMove => e
+    #   puts e
+    #   retry
+    # end
+  end
 end

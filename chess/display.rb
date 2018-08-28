@@ -32,7 +32,11 @@ class Display
     while true
       render
       puts "---"
+      p @cursor.cursor_pos
     end
   end
 
 end
+
+board = Board.new
+disp = Display.new(board)
